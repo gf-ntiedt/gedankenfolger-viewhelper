@@ -1,4 +1,3 @@
-## TYPO3 v6.2
 # Ignore several upload and file directories.
 /fileadmin/user_upload/
 /fileadmin/_temp_/
@@ -21,3 +20,5 @@
 /index.php
 # Ignore temp directory.
 /typo3temp/
+.idea/
+.git/
