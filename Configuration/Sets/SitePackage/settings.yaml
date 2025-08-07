@@ -1,0 +1,5 @@
+styles:
+  templates:
+    layoutRootPath: 'EXT:gedankenfolger_viewhelper/Resources/Private/ContentElements/Layouts/'
+    partialRootPath: 'EXT:gedankenfolger_viewhelper/Resources/Private/ContentElements/Partials/'
+    templateRootPath: 'EXT:gedankenfolger_viewhelper/Resources/Private/ContentElements/Templates/'
