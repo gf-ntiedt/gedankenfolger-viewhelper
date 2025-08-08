@@ -28,7 +28,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  *  - Pass additional data-attributes or arbitrary attributes via `data` and `additionalAttributes` arguments.
  *
  * @package   Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Resource
- * @version   13.0.0
+ * @version   13.0.4
  * @since     13.0.0
  * @author    Niels Tiedt <niels.tiedt@gedankenfolger.de>
  * @company   Gedankenfolger GmbH

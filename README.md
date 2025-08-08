@@ -1,72 +1,174 @@
-# Gedankenfolger Viewhelper<br/>gedankenfolger-viewhelper
+<h1>TYPO3 Extension Gedankenfolger Viewhelper<br/>(gedankenfolger-viewhelper)</h1>
+<p>
+    A collection of viewhelpers to make the work a little bit easier.
+</p>
+<p>
+    First of all many thanks to the hole TYPO3 community, all supporters of TYPO3 and especially to the <a href="https://typo3.org/" target="_blank">TYPO3-Team</a> + <a href="https://www.gedankenfolger.de/" target="_blank">Gedankenfolger GmbH</a>.
+</p>
 
-A collection of viewhelpers to make the work a little bit easier.
+<h3>
+    Contents of this file
+</h3>
+<ol>
+    <li>
+        <a href="#viewhelper">Viewhelper</a>
+        <ol>
+            <li>
+                <a href="#ipviewhelper">IpViewHelper</a>
+            </li>
+            <li>
+                <a href="#streamiframeviewHelper">StreamIframeViewHelper</a>
+            </li>
+            <li>
+                <a href="#svginlineviewhelper">SvgInlineViewHelper</a>
+            </li>
+            <li>
+                <a href="#urlschemeviewhelper">UrlschemeViewHelper</a>
+            </li>
+        </ol>
+    </li>
+</ol>
+<hr/>
+<h3 id="viewhelper">
+    Viewhelper:
+</h3>
 
-### IpViewHelper:
-ViewHelper to determine and output the client IP address.
-This ViewHelper checks in the following order:
-*   1. HTTP_CLIENT_IP (shared internet)
-*   2. HTTP_X_FORWARDED_FOR (proxy)
-*   3. REMOTE_ADDR (direct connection)
+<h3 id="ipviewhelper">
+    IpViewHelper
+</h3>
 
-and returns the first found IP address as a string.
+<p>
+    ViewHelper to determine and output the client IP address.<br/>
+    This ViewHelper checks in the following order:
+</p>
 
-Example usage:
+<ol>
+    <li>
+        HTTP_CLIENT_IP (shared internet)
+    </li>
+    <li>
+        HTTP_X_FORWARDED_FOR (proxy)
+    </li>
+    <li>
+        REMOTE_ADDR (direct connection)
+    </li>
+</ol>
+<p>
+    Example usage:
+</p>
+
+```xml
+<gfv:ip>
 ```
-{gfv:ip()}
-```
-or
-```
-{gfv:ip()}
-```
----
 
-## Namespace cloudflare:<br>```{gfv:cloudflare.viewhelpername()}```
+<hr/>
 
----
-### StreamIframeViewHelper:
-Generates an ```<iframe>``` element to embed a Cloudflare Stream video.
-Constructs the iframe src URL by concatenating:
-- streamid (Cloudflare Stream video ID)
-- customerid (Cloudflare customer/account ID)
-- optional parameters: preload, loop, muted, autoplay
+<h3 id="namespace_cloudflare">
+    Namespace cloudflare: <br/> <code>{gfv:cloudflare}</code>
+</h3>
 
+<h3 id="streamiframeviewHelper">
+    StreamIframeViewHelper
+</h3>
 
-  Example usage:
-```
+<p>
+    Generates an iframe tag to embed a Cloudflare Stream video.<br/>
+    Constructs the iframe src URL by concatenating:
+</p>
+
+<ol>
+    <li>
+        streamid (Cloudflare Stream video ID)
+    </li>
+    <li>
+        customerid (Cloudflare customer/account ID)
+    </li>
+    <li>
+        optional parameters: preload, loop, muted, autoplay
+    </li>
+</ol>
+
+<p>
+    Example usage:
+</p>
+
+```xml
 <gfv:streamIframe streamid="abc123" customerid="42" preload="auto" loop="true" muted="false" autoplay="true" />
 ```
----
 
-## Namespace resource:<br>```{gfv:resource.viewhelpername()}```
+<hr/>
 
----
-### SvgInlineViewHelper:
-Renders an SVG file inline by embedding its XML content directly into the output.
-It handles loading the file via FAL (File or FileReference) or by path, validates
-that the file is non-empty and an SVG, then parses and injects attributes safely.
-Pass additional data-attributes or arbitrary attributes via `data` and `additionalAttributes` arguments.
+<h3 id="namespace_resource">
+    Namespace resource: <br/> <code>{gfv:resource}</code>
+</h3>
 
+<h3 id="svginlineviewhelper">
+    SvgInlineViewHelper
+</h3>
 
-Example usage:
+<p>
+    Renders an SVG file inline by embedding its XML content directly into the output.<br/>
+    It handles loading the file via FAL (File or FileReference) or by path, validates that the file is non-empty and an SVG, then parses and injects attributes safely.<br/>
+    Pass additional data-attributes or arbitrary attributes via `data` and `additionalAttributes` arguments.
+</p>
+
+<ol>
+    <li>
+        streamid (Cloudflare Stream video ID)
+    </li>
+    <li>
+        customerid (Cloudflare customer/account ID)
+    </li>
+    <li>
+        optional parameters: preload, loop, muted, autoplay
+    </li>
+</ol>
+<p>
+    Example usage:
+</p>
+
+```xml
+<gfv:resource.svgInline src="EXT:Sitepackage/Resources/Public/Logo.svg" width="200" />
 ```
- <gfv:resource.svgInline src="EXT:Sitepackage/Resources/Public/Logo.svg" width="200" />
-```
+
 or
+
+```xml
+<gfv:resource.svgInline image="{fileReference}" class="icon" id="logo" viewBox="0 0 100 100" />
 ```
- <gfv:resource.svgInline image="{fileReference}" class="icon" id="logo" viewBox="0 0 100 100" />
+
+<hr/>
+
+<h3 id="namespace_link">
+    Namespace link: <br/> <code>{gfv:link}</code>
+</h3>
+
+<h3 id="urlschemeviewhelper">
+    UrlschemeViewHelper
+</h3>
+
+<p>
+    This ViewHelper generates a hyperlink for phone numbers by formatting them according to a specific scheme (e.g., tel:). <br/>
+    It validates the phone number format and ensures it is properly formatted before creating the link.
+</p>
+
+<ol>
+    <li>
+        streamid (Cloudflare Stream video ID)
+    </li>
+    <li>
+        customerid (Cloudflare customer/account ID)
+    </li>
+    <li>
+        optional parameters: preload, loop, muted, autoplay
+    </li>
+</ol>
+<p>
+    Example usage:
+</p>
+
+```xml
+<gfv:link.urlscheme number="+49 (0) 7777 77 77 77" />
 ```
 
----
-
-## Namespace link:<br>```{gfv:link.viewhelpername()}```
-
----
-### UrlschemeViewHelper:
-This ViewHelper generates a hyperlink for phone numbers by formatting them according to a specific scheme (e.g., tel:). It validates the phone number format and ensures it is properly formatted before creating the link.
-
-
-Example usage:
-```
-<gfv:link.urlscheme number="+49 (0) 7152 90 63 30" />
-```
+<hr/>
