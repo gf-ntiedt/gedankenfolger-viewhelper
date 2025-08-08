@@ -16,10 +16,13 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
  * format and ensures it is properly formatted before creating the link.
  *
  * Example usage:
- * <gfv:link.urlscheme number="+49 (0) 7152 90 63 30" />
+ * <gfv:link.urlscheme number="+49 (0) 7777 77 77 77" />
  *
  * @package Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Link
- * @version 12.2.0
+ * @version 13.0.4
+ * @since 12.2.0
+ * @author    Niels Tiedt <niels.tiedt@gedankenfolger.de>
+ * @company   Gedankenfolger GmbH
  */
 final class UrlschemeViewHelper extends AbstractTagBasedViewHelper
 {
