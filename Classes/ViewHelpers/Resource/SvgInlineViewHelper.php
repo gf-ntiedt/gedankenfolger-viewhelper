@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Gedankenfolger\GedankenfolgerSitepackage\ViewHelpers\Resource;
+namespace Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Resource;
 
 use Closure;
 use DOMDocument;
