@@ -23,5 +23,5 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'Niels Tiedt',
     'author_email' => 'niels.tiedt@gedankenfolger.de',
     'author_company' => 'Gedankenfolger',
-    'version' => '13.0.2',
+    'version' => '13.0.3',
 ];
