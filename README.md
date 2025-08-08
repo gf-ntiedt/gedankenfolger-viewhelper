@@ -21,7 +21,7 @@ or
 ```
 ---
 
-## Cloudflare:<br>```{gfv:cloudflare.viewhelpername()}```
+## Namespace cloudflare:<br>```{gfv:cloudflare.viewhelpername()}```
 
 ---
 ### StreamIframeViewHelper:
@@ -38,7 +38,7 @@ Constructs the iframe src URL by concatenating:
 ```
 ---
 
-## Resource:<br>```{gfv:resource.viewhelpername()}```
+## Namespace resource:<br>```{gfv:resource.viewhelpername()}```
 
 ---
 ### SvgInlineViewHelper:
