@@ -34,7 +34,7 @@ Constructs the iframe src URL by concatenating:
 
   Example usage:
 ```
-<cf:streamIframe streamid="abc123" customerid="42" preload="auto" loop="true" muted="false" autoplay="true" />
+<gfv:streamIframe streamid="abc123" customerid="42" preload="auto" loop="true" muted="false" autoplay="true" />
 ```
 ---
 
@@ -55,4 +55,18 @@ Example usage:
 or
 ```
  <gfv:resource.svgInline image="{fileReference}" class="icon" id="logo" viewBox="0 0 100 100" />
+```
+
+---
+
+## Namespace link:<br>```{gfv:link.viewhelpername()}```
+
+---
+### UrlschemeViewHelper:
+This ViewHelper generates a hyperlink for phone numbers by formatting them according to a specific scheme (e.g., tel:). It validates the phone number format and ensures it is properly formatted before creating the link.
+
+
+Example usage:
+```
+<gfv:link.urlscheme number="+49 (0) 7152 90 63 30" />
 ```

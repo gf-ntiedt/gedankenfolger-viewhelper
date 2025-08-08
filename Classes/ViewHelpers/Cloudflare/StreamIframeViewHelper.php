@@ -16,7 +16,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
  *   - optional parameters: preload, loop, muted, autoplay
  *
  * Example usage:
- *   <cf:streamIframe streamid="abc123" customerid="42" preload="auto" loop="true" muted="false" autoplay="true" />
+ *   <gfv:streamIframe streamid="abc123" customerid="42" preload="auto" loop="true" muted="false" autoplay="true" />
  *
  * @package   Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Cloudflare
  * @version   13.0.0
