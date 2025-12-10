@@ -1,7 +1,7 @@
 {
     "name": "gedankenfolger/gedankenfolger-viewhelper",
     "type": "typo3-cms-extension",
-    "version": "13.0.4",
+    "version": "13.0.5",
     "description": "A collection of viewhelpers to make the work a little bit easier",
     "homepage": "https://www.gedankenfolger.de",
     "license": ["GPL-2.0-or-later"],
