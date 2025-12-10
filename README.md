@@ -27,6 +27,9 @@
             </li>
         </ol>
     </li>
+    <li>
+        <a href="#noticetrademark">Notice on Logo / Trademark Use</a>
+    </li>
 </ol>
 <hr/>
 <h3 id="viewhelper">
@@ -172,3 +175,17 @@ or
 ```
 
 <hr/>
+
+
+<h3 id="noticetrademark">
+    Notice on Logo / Trademark Use
+</h3>
+<p>
+The logo used in this extension is protected by copyright and, where applicable, trademark law and remains the exclusive property of Gedankenfolger GmbH.
+
+Use of the logo is only permitted in the form provided here. Any changes, modifications, or adaptations of the logo, as well as its use in other projects, applications, or contexts, require the prior written consent of Gedankenfolger GmbH.
+
+In forks, derivatives, or further developments of this extension, the logo may only be used if explicit consent has been granted by Gedankenfolger GmbH. Otherwise, the logo must be removed or replaced with an own, non-protected logo.
+
+All other logos and icons bundled with this extension are either subject to the TYPO3 licensing terms (The MIT License (MIT), see https://typo3.org) or are in the public domain.
+</p>
