@@ -25,6 +25,9 @@
             <li>
                 <a href="#urlschemeviewhelper">UrlschemeViewHelper</a>
             </li>
+            <li>
+                <a href="#packageinfoviewhelper">PackageInfoViewHelper</a>
+            </li>
         </ol>
     </li>
     <li>
@@ -79,17 +82,46 @@
     Constructs the iframe src URL by concatenating:
 </p>
 
-<ol>
+<ul>
     <li>
-        streamid (Cloudflare Stream video ID)
+        streamid:<br>
+        Cloudflare Stream video ID
     </li>
     <li>
-        customerid (Cloudflare customer/account ID)
+        customerid:<br>
+        Cloudflare customer/account ID
+    </li>
+</ul>
+<p>
+    Optional parameters:
+</p>
+<ul>
+    <li>
+        preload:<br>
+        Video preload mode<br>
+        Default:'none'
     </li>
     <li>
-        optional parameters: preload, loop, muted, autoplay
+        loop:<br>
+        Loop video after end<br>
+        Default:false
     </li>
-</ol>
+    <li>
+        muted:<br>
+        Start muted<br>
+        Default:false
+    </li>
+    <li>
+        autoplay:<br>
+        Autoplay video<br>
+        Default:null
+    </li>
+    <li>
+        poster:<br>
+        Poster timestamp in seconds<br>
+        Default:null
+    </li>
+</ul>
 
 <p>
     Example usage:
@@ -114,18 +146,6 @@
     It handles loading the file via FAL (File or FileReference) or by path, validates that the file is non-empty and an SVG, then parses and injects attributes safely.<br/>
     Pass additional data-attributes or arbitrary attributes via `data` and `additionalAttributes` arguments.
 </p>
-
-<ol>
-    <li>
-        streamid (Cloudflare Stream video ID)
-    </li>
-    <li>
-        customerid (Cloudflare customer/account ID)
-    </li>
-    <li>
-        optional parameters: preload, loop, muted, autoplay
-    </li>
-</ol>
 <p>
     Example usage:
 </p>
@@ -155,23 +175,81 @@ or
     It validates the phone number format and ensures it is properly formatted before creating the link.
 </p>
 
-<ol>
+<ul>
     <li>
-        streamid (Cloudflare Stream video ID)
+        number:<br>
+        Phone number to be formatted
     </li>
+</ul>
+<p>
+    Optional parameters:
+</p>
+<ul>
     <li>
-        customerid (Cloudflare customer/account ID)
+        scheme:<br>
+        URL scheme to prepend, e.g., tel:<br>
+        Default: tel:
     </li>
-    <li>
-        optional parameters: preload, loop, muted, autoplay
-    </li>
-</ol>
+</ul>
 <p>
     Example usage:
 </p>
 
 ```xml
 <gfv:link.urlscheme number="+49 (0) 7777 77 77 77" />
+```
+
+<hr/>
+
+<h3 id="namespace_composer">
+    Namespace composer: <br/> <code>{gfv:composer}</code>
+</h3>
+
+<h3 id="packageinfoviewhelper">
+    PackageInfoViewHelper
+</h3>
+
+<p>
+    This ViewHelper exposes package metadata as reported by Composer\InstalledVersions
+</p>
+
+<ul>
+    <li>
+        name:<br>
+        Composer package name ("vendor/package") or ext key if heuristicResolve=1.
+    </li>
+</ul>
+<p>
+    Optional parameters:
+</p>
+<ul>
+    <li>
+        key:<br>
+        Optional key to return: packageName|isInstalled|version|prettyVersion|reference|installPath.<br>
+        Default:''
+    </li>
+    <li>
+        jsonEncode:<br>
+        Return JSON-encoded result (useful for arrays).<br>
+        Default:false
+    </li>
+    <li>
+        heuristicResolve:<br>
+        Resolve ext key to package by suffix match if no slash is present.<br>
+        Default:true
+    </li>
+    <li>
+        exposeInstallPath:<br>
+        Include absolute install path (can be sensitive).<br>
+        Default:false
+    </li>
+</ul>
+<p>
+    Example usage:
+</p>
+
+```xml
+<gf:composer.packageInfo name="vendor/package" key="prettyVersion" />
 ```
 
 <hr/>
