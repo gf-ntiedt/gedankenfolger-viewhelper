@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Composer;
 
 use Composer\InstalledVersions;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * <gf:composer.packageInfo name="vendor/package" key="prettyVersion" />

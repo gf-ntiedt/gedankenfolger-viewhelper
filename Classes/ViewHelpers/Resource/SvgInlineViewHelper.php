@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Resource;
 
-use Closure;
 use Throwable;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Service\ImageService;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Exception as ViewHelperException;
 
@@ -73,18 +71,12 @@ class SvgInlineViewHelper extends AbstractViewHelper
     /**
      * Renders the inline SVG.
      *
-     * @param array<string,mixed> $arguments
-     * @param Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
      * @return string Inline SVG (root <svg> element) or empty string on parse failure
      * @throws ViewHelperException When arguments are invalid or file is not a non-empty SVG
      */
-    public static function renderStatic(
-        array $arguments,
-        Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ): string {
-        $image = self::getImage($arguments);
+    public function render(): string
+    {
+        $image = self::getImage($this->arguments);
         $svgContent = $image->getContents();
 
         if ($svgContent === '') {
@@ -93,13 +85,13 @@ class SvgInlineViewHelper extends AbstractViewHelper
 
         /** @var array<string,mixed> $attributes */
         $attributes = [
-            'id' => $arguments['id'] ?? null,
-            'class' => $arguments['class'] ?? null,
-            'width' => $arguments['width'] ?? null,
-            'height' => $arguments['height'] ?? null,
-            'viewBox' => $arguments['viewBox'] ?? null,
-            'data' => $arguments['data'] ?? null,
-        ] + (($arguments['additionalAttributes'] ?? []) ?: []);
+            'id' => $this->arguments['id'] ?? null,
+            'class' => $this->arguments['class'] ?? null,
+            'width' => $this->arguments['width'] ?? null,
+            'height' => $this->arguments['height'] ?? null,
+            'viewBox' => $this->arguments['viewBox'] ?? null,
+            'data' => $this->arguments['data'] ?? null,
+        ] + (($this->arguments['additionalAttributes'] ?? []) ?: []);
 
         $cacheKey = self::buildRuntimeCacheKey($image, $attributes);
         if (isset(self::$runtimeCache[$cacheKey])) {
