@@ -18,7 +18,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
  * Example usage:
  *   <gfv:streamIframe streamid="abc123" customerid="42" preload="auto" loop="true" muted="false" autoplay="true" />
  *
- * @package   Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Cloudflare
  * @version   14.0.2
  * @since     13.0.0
  * @author    Niels Tiedt <niels.tiedt@gedankenfolger.de>
@@ -76,10 +75,18 @@ final class StreamIframeViewHelper extends AbstractTagBasedViewHelper
 
         // Build query parameters
         $params = [];
-        if ($preload)  { $params['preload']  = $preload; }
-        if ($loop)     { $params['loop']     = 'true'; }
-        if ($muted)    { $params['muted']    = 'true'; }
-        if ($autoplay) { $params['autoplay'] = 'true'; }
+        if ($preload) {
+            $params['preload']  = $preload;
+        }
+        if ($loop) {
+            $params['loop']     = 'true';
+        }
+        if ($muted) {
+            $params['muted']    = 'true';
+        }
+        if ($autoplay) {
+            $params['autoplay'] = 'true';
+        }
         // poster handling commented until thumbnail support
         // if ($poster) { $params['poster'] = $poster; }
 

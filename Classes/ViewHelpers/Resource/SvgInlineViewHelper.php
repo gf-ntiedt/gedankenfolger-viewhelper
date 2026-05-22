@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Resource;
 
-use Throwable;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FileReference;
@@ -24,7 +23,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception as ViewHelperException;
  * Inline SVG is XSS-sensitive. This ViewHelper applies a conservative, icon-focused sanitization.
  * For untrusted SVG sources (e.g. editor uploads), a dedicated sanitizer on file-level is recommended.
  *
- * @package   Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Resource
  * @version   14.0.2
  * @since     13.0.0
  * @author    Niels Tiedt <niels.tiedt@gedankenfolger.de>
@@ -48,8 +46,6 @@ final class SvgInlineViewHelper extends AbstractViewHelper
 
     /**
      * Registers ViewHelper arguments.
-     *
-     * @return void
      */
     public function initializeArguments(): void
     {
@@ -128,7 +124,7 @@ final class SvgInlineViewHelper extends AbstractViewHelper
                 $imageArg,
                 (bool)($arguments['treatIdAsReference'] ?? false)
             );
-        } catch (Throwable $exception) {
+        } catch (\Throwable $exception) {
             throw new ViewHelperException('SvgInlineViewHelper: could not resolve image from given arguments.', 1678367678, $exception);
         }
 
@@ -195,7 +191,6 @@ final class SvgInlineViewHelper extends AbstractViewHelper
      *  - values containing url(http/https/data/javascript:...) (conservative)
      *
      * @param \DOMDocument $dom
-     * @return void
      */
     private static function sanitizeSvgDom(\DOMDocument $dom): void
     {
