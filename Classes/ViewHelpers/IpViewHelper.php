@@ -19,33 +19,34 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  *    <gfv:ip />
  *    {gfv:ip()}
  *
+ *
+ *  Compare against a specific IP:
+ *    <f:if condition="{gfv:ip()} == '200.200.200.200'">...</f:if>
+ *
  * @package   Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers
- * @version   13.0.4
+ * @version   14.0.2
  * @since     13.0.0
  * @author    Niels Tiedt <niels.tiedt@gedankenfolger.de>
  * @company   Gedankenfolger GmbH
  */
 final class IpViewHelper extends AbstractViewHelper
 {
-    /** @var bool Indicates that output is not escaped, since it is an IP address */
-    protected $escapeOutput = false;
-
-    /**
-     * Returns the determined client IP address.
-     *
-     * @return string The IP address of the requesting client
-     */
     public function render(): string
     {
-        // If the user is behind a shared internet service
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            return $_SERVER['HTTP_CLIENT_IP'];
+        $candidates = [
+            $_SERVER['HTTP_CLIENT_IP'] ?? '',
+            $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '',
+            $_SERVER['REMOTE_ADDR'] ?? '',
+        ];
+
+        foreach ($candidates as $candidate) {
+            // X-Forwarded-For may contain a comma-separated list; take the first entry
+            $ip = trim(explode(',', $candidate)[0]);
+            if ($ip !== '' && filter_var($ip, FILTER_VALIDATE_IP) !== false) {
+                return $ip;
+            }
         }
-        // If the user is behind a proxy
-        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            return $_SERVER['HTTP_X_FORWARDED_FOR'];
-        }
-        // Default: direct connection
-        return $_SERVER['REMOTE_ADDR'];
+
+        return '';
     }
 }

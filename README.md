@@ -64,8 +64,19 @@
 </p>
 
 ```xml
-<gfv:ip>
+<!-- Output the client IP address -->
+<gfv:ip />
+{gfv:ip()}
+
+<!-- Compare against a specific IP -->
+<f:if condition="{gfv:ip()} == '200.200.200.200'">
+    <!-- content shown only for this IP -->
+</f:if>
 ```
+
+<p>
+    Returns an empty string when no valid IP address can be determined (e.g. CLI context).
+</p>
 
 <hr/>
 

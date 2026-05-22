@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Link;
 
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
 
@@ -22,7 +21,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
  * +49 2817 333-278, +49 2817 333-459, +49 2817 333-661, +49 2817 333-297, +49 2817 333-8090, +49 2817 333-250, +49 2817 333-233, +49 2817 333-210, +49 2817 333-262, +49 2817 333-610, +49 (0) 7777 77 77 77, +1 973 914 1306, +1 862 200 8073, +1 862 345 0739, +86 158 2141 5697, +33 6 32 85 82 98, +91 9146003489, +65 9746 0800
  *
  * @package Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Link
- * @version 13.1.0
+ * @version 14.0.2
  * @since 12.2.0
  * @author    Niels Tiedt <niels.tiedt@gedankenfolger.de>
  * @company   Gedankenfolger GmbH
@@ -46,8 +45,8 @@ final class UrlschemeViewHelper extends AbstractTagBasedViewHelper
 
         // Register the 'number' argument as a required string input
         $this->registerArgument('number', 'string', 'Phone number to be formatted', true);
-        // Register the 'scheme' argument as an optional string input with a default value of 'tel:'
-        $this->registerArgument('scheme', 'string', 'URL scheme to prepend, e.g., tel:', false, 'tel:');
+        // Allowed schemes: tel:, mailto:, sms:, callto:
+        $this->registerArgument('scheme', 'string', 'URL scheme to prepend. Allowed: tel:, mailto:, sms:, callto:', false, 'tel:');
     }
 
     /**
@@ -61,25 +60,28 @@ final class UrlschemeViewHelper extends AbstractTagBasedViewHelper
      */
     public function render(): string
     {
-        // Retrieve the phone number from the arguments
         $number = trim((string)$this->arguments['number']);
+        $scheme = (string)$this->arguments['scheme'];
+
+        $allowedSchemes = ['tel:', 'mailto:', 'sms:', 'callto:'];
+        if (!in_array($scheme, $allowedSchemes, true)) {
+            throw new Exception('ERROR: Invalid scheme "' . $scheme . '". Allowed: ' . implode(', ', $allowedSchemes), 1748953200);
+        }
 
         // Require international format starting with '+'
-        if (strpos($number, '+') !== 0) {
+        if (!str_starts_with($number, '+')) {
             throw new Exception('ERROR: Invalid format. Number must start with "+" and country code, e.g. +49 (0) 7777 77 77 77', 1700485661);
         }
 
         // Normalize: keep leading '+' and all digits only
-        $digitsOnly = preg_replace('/\D+/', '', $number);
-        $formattedNumber = '+' . $digitsOnly;
+        $formattedNumber = '+' . preg_replace('/\D+/', '', $number);
 
         // Validate resulting normalized number (6-15 digits after '+')
         if (!preg_match('/^\+\d{6,15}$/', $formattedNumber)) {
-            throw new Exception('ERROR: Invalid format. Required format e.g. +49 (0) 7777 77 77 77', 1700485661);
+            throw new Exception('ERROR: Invalid format. Required format e.g. +49 (0) 7777 77 77 77', 1700485662);
         }
 
-        // Add the formatted phone number as the href attribute with the specified scheme
-        $this->tag->addAttribute('href', $this->arguments['scheme'] . $formattedNumber);
+        $this->tag->addAttribute('href', $scheme . $formattedNumber);
         // Set the content of the tag to the original (unformatted) phone number
         $this->tag->setContent($number);
 

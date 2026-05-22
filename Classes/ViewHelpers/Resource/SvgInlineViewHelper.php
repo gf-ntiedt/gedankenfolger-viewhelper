@@ -24,7 +24,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception as ViewHelperException;
  * For untrusted SVG sources (e.g. editor uploads), a dedicated sanitizer on file-level is recommended.
  *
  * @package   Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Resource
- * @version   13.1.0
+ * @version   14.0.2
  * @since     13.0.0
  * @author    Niels Tiedt <niels.tiedt@gedankenfolger.de>
  * @company   Gedankenfolger GmbH
@@ -205,7 +205,7 @@ class SvgInlineViewHelper extends AbstractViewHelper
         $xpath = new \DOMXPath($dom);
 
         $dangerous = $xpath->query(
-            '//*[local-name()="script" or local-name()="foreignObject" or local-name()="iframe" or local-name()="object" or local-name()="embed"]'
+            '//*[local-name()="script" or local-name()="foreignObject" or local-name()="iframe" or local-name()="object" or local-name()="embed" or local-name()="style"]'
         );
         if ($dangerous !== false) {
             for ($i = $dangerous->length - 1; $i >= 0; $i--) {
