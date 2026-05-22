@@ -26,7 +26,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception as ViewHelperException;
  * For untrusted SVG sources (e.g. editor uploads), a dedicated sanitizer on file-level is recommended.
  *
  * @package   Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Resource
- * @version   13.1.0
+ * @version   13.2.1
  * @since     13.0.0
  * @author    Niels Tiedt <niels.tiedt@gedankenfolger.de>
  * @company   Gedankenfolger GmbH
