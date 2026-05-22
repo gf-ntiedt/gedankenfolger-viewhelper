@@ -56,7 +56,7 @@ final class UrlschemeViewHelper extends AbstractTagBasedViewHelper
      * the specified scheme. It then generates an HTML link with the formatted number.
      *
      * @return string The rendered HTML string with the formatted phone number link.
-     * @throws Exception If the phone number format is invalid.
+     * @throws \TYPO3Fluid\Fluid\Core\ViewHelper\Exception If the scheme is not allowed or the number format is invalid.
      */
     public function render(): string
     {
@@ -65,12 +65,12 @@ final class UrlschemeViewHelper extends AbstractTagBasedViewHelper
 
         $allowedSchemes = ['tel:', 'mailto:', 'sms:', 'callto:'];
         if (!in_array($scheme, $allowedSchemes, true)) {
-            throw new Exception('ERROR: Invalid scheme "' . $scheme . '". Allowed: ' . implode(', ', $allowedSchemes), 1748953200);
+            throw new Exception('UrlschemeViewHelper: invalid scheme "' . $scheme . '". Allowed: ' . implode(', ', $allowedSchemes), 1748953200);
         }
 
         // Require international format starting with '+'
         if (!str_starts_with($number, '+')) {
-            throw new Exception('ERROR: Invalid format. Number must start with "+" and country code, e.g. +49 (0) 7777 77 77 77', 1700485661);
+            throw new Exception('UrlschemeViewHelper: number must start with "+" and country code, e.g. +49 (0) 7777 77 77 77', 1700485661);
         }
 
         // Normalize: keep leading '+' and all digits only
@@ -78,7 +78,7 @@ final class UrlschemeViewHelper extends AbstractTagBasedViewHelper
 
         // Validate resulting normalized number (6-15 digits after '+')
         if (!preg_match('/^\+\d{6,15}$/', $formattedNumber)) {
-            throw new Exception('ERROR: Invalid format. Required format e.g. +49 (0) 7777 77 77 77', 1700485662);
+            throw new Exception('UrlschemeViewHelper: invalid number format, e.g. +49 (0) 7777 77 77 77', 1700485662);
         }
 
         $this->tag->addAttribute('href', $scheme . $formattedNumber);

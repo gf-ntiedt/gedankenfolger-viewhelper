@@ -52,12 +52,20 @@ final class StreamIframeViewHelper extends AbstractTagBasedViewHelper
      * Render and return the <iframe> element.
      *
      * @return string Rendered <iframe> HTML tag
-     * @throws Exception if required arguments are missing or invalid
+     * @throws Exception if streamid or customerid is empty
      */
     public function render(): string
     {
-        $streamid   = $this->arguments['streamid'];
-        $customerid = $this->arguments['customerid'];
+        $streamid   = trim((string)$this->arguments['streamid']);
+        $customerid = trim((string)$this->arguments['customerid']);
+
+        if ($streamid === '') {
+            throw new Exception('StreamIframeViewHelper: argument "streamid" must not be empty.', 1748960001);
+        }
+
+        if ($customerid === '') {
+            throw new Exception('StreamIframeViewHelper: argument "customerid" must not be empty.', 1748960002);
+        }
         $preload    = $this->arguments['preload'];
         $loop       = $this->arguments['loop'];
         $muted      = $this->arguments['muted'];

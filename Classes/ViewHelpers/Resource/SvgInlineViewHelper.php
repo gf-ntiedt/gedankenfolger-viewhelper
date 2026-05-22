@@ -6,6 +6,7 @@ namespace Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Resource;
 
 use Throwable;
 use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Service\ImageService;
@@ -29,7 +30,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception as ViewHelperException;
  * @author    Niels Tiedt <niels.tiedt@gedankenfolger.de>
  * @company   Gedankenfolger GmbH
  */
-class SvgInlineViewHelper extends AbstractViewHelper
+final class SvgInlineViewHelper extends AbstractViewHelper
 {
     /**
      * SVG output must not be HTML-escaped by Fluid, otherwise the XML will be broken.
@@ -108,10 +109,10 @@ class SvgInlineViewHelper extends AbstractViewHelper
      * Resolves the SVG file via Extbase ImageService.
      *
      * @param array<string,mixed> $arguments
-     * @return File|FileReference
+     * @return FileInterface
      * @throws ViewHelperException
      */
-    protected static function getImage(array $arguments): File|FileReference
+    private static function getImage(array $arguments): FileInterface
     {
         $src = (string)($arguments['src'] ?? '');
         $imageArg = $arguments['image'] ?? null;
@@ -128,7 +129,7 @@ class SvgInlineViewHelper extends AbstractViewHelper
                 (bool)($arguments['treatIdAsReference'] ?? false)
             );
         } catch (Throwable $exception) {
-            throw new ViewHelperException('Could not convert given arguments to image object.', 1678367678);
+            throw new ViewHelperException('SvgInlineViewHelper: could not resolve image from given arguments.', 1678367678, $exception);
         }
 
         if (strtolower((string)$image->getExtension()) !== 'svg') {
@@ -345,14 +346,14 @@ class SvgInlineViewHelper extends AbstractViewHelper
     /**
      * Builds a per-request cache key from file identity/mtime and normalized attributes.
      *
-     * @param File|FileReference $file
+     * @param FileInterface $file
      * @param array<string,mixed> $attributes
      * @return string
      */
-    private static function buildRuntimeCacheKey(File|FileReference $file, array $attributes): string
+    private static function buildRuntimeCacheKey(FileInterface $file, array $attributes): string
     {
-        $identifier = method_exists($file, 'getIdentifier') ? (string)$file->getIdentifier() : '';
-        $mtime = method_exists($file, 'getModificationTime') ? (string)$file->getModificationTime() : '';
+        $identifier = (string)$file->getIdentifier();
+        $mtime = (string)$file->getModificationTime();
 
         $normalized = self::filterAndNormalizeAttributes($attributes);
         ksort($normalized);
