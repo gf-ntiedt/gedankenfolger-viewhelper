@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Resource;
 
-use Closure;
-use Throwable;
 use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Service\ImageService;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Exception as ViewHelperException;
 
@@ -25,13 +23,12 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception as ViewHelperException;
  * Inline SVG is XSS-sensitive. This ViewHelper applies a conservative, icon-focused sanitization.
  * For untrusted SVG sources (e.g. editor uploads), a dedicated sanitizer on file-level is recommended.
  *
- * @package   Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Resource
  * @version   13.2.1
  * @since     13.0.0
  * @author    Niels Tiedt <niels.tiedt@gedankenfolger.de>
  * @company   Gedankenfolger GmbH
  */
-class SvgInlineViewHelper extends AbstractViewHelper
+final class SvgInlineViewHelper extends AbstractViewHelper
 {
     /**
      * SVG output must not be HTML-escaped by Fluid, otherwise the XML will be broken.
@@ -49,8 +46,6 @@ class SvgInlineViewHelper extends AbstractViewHelper
 
     /**
      * Registers ViewHelper arguments.
-     *
-     * @return void
      */
     public function initializeArguments(): void
     {
@@ -73,18 +68,12 @@ class SvgInlineViewHelper extends AbstractViewHelper
     /**
      * Renders the inline SVG.
      *
-     * @param array<string,mixed> $arguments
-     * @param Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
      * @return string Inline SVG (root <svg> element) or empty string on parse failure
      * @throws ViewHelperException When arguments are invalid or file is not a non-empty SVG
      */
-    public static function renderStatic(
-        array $arguments,
-        Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ): string {
-        $image = self::getImage($arguments);
+    public function render(): string
+    {
+        $image = self::getImage($this->arguments);
         $svgContent = $image->getContents();
 
         if ($svgContent === '') {
@@ -93,13 +82,13 @@ class SvgInlineViewHelper extends AbstractViewHelper
 
         /** @var array<string,mixed> $attributes */
         $attributes = [
-            'id' => $arguments['id'] ?? null,
-            'class' => $arguments['class'] ?? null,
-            'width' => $arguments['width'] ?? null,
-            'height' => $arguments['height'] ?? null,
-            'viewBox' => $arguments['viewBox'] ?? null,
-            'data' => $arguments['data'] ?? null,
-        ] + (($arguments['additionalAttributes'] ?? []) ?: []);
+            'id' => $this->arguments['id'] ?? null,
+            'class' => $this->arguments['class'] ?? null,
+            'width' => $this->arguments['width'] ?? null,
+            'height' => $this->arguments['height'] ?? null,
+            'viewBox' => $this->arguments['viewBox'] ?? null,
+            'data' => $this->arguments['data'] ?? null,
+        ] + (($this->arguments['additionalAttributes'] ?? []) ?: []);
 
         $cacheKey = self::buildRuntimeCacheKey($image, $attributes);
         if (isset(self::$runtimeCache[$cacheKey])) {
@@ -116,10 +105,10 @@ class SvgInlineViewHelper extends AbstractViewHelper
      * Resolves the SVG file via Extbase ImageService.
      *
      * @param array<string,mixed> $arguments
-     * @return File|FileReference
+     * @return FileInterface
      * @throws ViewHelperException
      */
-    protected static function getImage(array $arguments): File|FileReference
+    private static function getImage(array $arguments): FileInterface
     {
         $src = (string)($arguments['src'] ?? '');
         $imageArg = $arguments['image'] ?? null;
@@ -135,8 +124,8 @@ class SvgInlineViewHelper extends AbstractViewHelper
                 $imageArg,
                 (bool)($arguments['treatIdAsReference'] ?? false)
             );
-        } catch (Throwable $exception) {
-            throw new ViewHelperException('Could not convert given arguments to image object.', 1678367678);
+        } catch (\Throwable $exception) {
+            throw new ViewHelperException('SvgInlineViewHelper: could not resolve image from given arguments.', 1678367678, $exception);
         }
 
         if (strtolower((string)$image->getExtension()) !== 'svg') {
@@ -194,7 +183,7 @@ class SvgInlineViewHelper extends AbstractViewHelper
      *
      * Removes:
      *  - doctype
-     *  - script / foreignObject / iframe / object / embed
+     *  - script / foreignObject / iframe / object / embed / style
      *  - image / feImage (prevents external loads)
      *  - event-handler attributes (on*)
      *  - style attributes
@@ -202,7 +191,6 @@ class SvgInlineViewHelper extends AbstractViewHelper
      *  - values containing url(http/https/data/javascript:...) (conservative)
      *
      * @param \DOMDocument $dom
-     * @return void
      */
     private static function sanitizeSvgDom(\DOMDocument $dom): void
     {
@@ -213,7 +201,7 @@ class SvgInlineViewHelper extends AbstractViewHelper
         $xpath = new \DOMXPath($dom);
 
         $dangerous = $xpath->query(
-            '//*[local-name()="script" or local-name()="foreignObject" or local-name()="iframe" or local-name()="object" or local-name()="embed"]'
+            '//*[local-name()="script" or local-name()="foreignObject" or local-name()="iframe" or local-name()="object" or local-name()="embed" or local-name()="style"]'
         );
         if ($dangerous !== false) {
             for ($i = $dangerous->length - 1; $i >= 0; $i--) {
@@ -353,14 +341,14 @@ class SvgInlineViewHelper extends AbstractViewHelper
     /**
      * Builds a per-request cache key from file identity/mtime and normalized attributes.
      *
-     * @param File|FileReference $file
+     * @param FileInterface $file
      * @param array<string,mixed> $attributes
      * @return string
      */
-    private static function buildRuntimeCacheKey(File|FileReference $file, array $attributes): string
+    private static function buildRuntimeCacheKey(FileInterface $file, array $attributes): string
     {
-        $identifier = method_exists($file, 'getIdentifier') ? (string)$file->getIdentifier() : '';
-        $mtime = method_exists($file, 'getModificationTime') ? (string)$file->getModificationTime() : '';
+        $identifier = (string)$file->getIdentifier();
+        $mtime = (string)$file->getModificationTime();
 
         $normalized = self::filterAndNormalizeAttributes($attributes);
         ksort($normalized);

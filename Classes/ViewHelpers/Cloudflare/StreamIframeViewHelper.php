@@ -18,7 +18,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
  * Example usage:
  *   <gfv:streamIframe streamid="abc123" customerid="42" preload="auto" loop="true" muted="false" autoplay="true" />
  *
- * @package   Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Cloudflare
  * @version   13.2.1
  * @since     13.0.0
  * @author    Niels Tiedt <niels.tiedt@gedankenfolger.de>
@@ -52,12 +51,20 @@ final class StreamIframeViewHelper extends AbstractTagBasedViewHelper
      * Render and return the <iframe> element.
      *
      * @return string Rendered <iframe> HTML tag
-     * @throws Exception if required arguments are missing or invalid
+     * @throws Exception if streamid or customerid is empty
      */
     public function render(): string
     {
-        $streamid   = $this->arguments['streamid'];
-        $customerid = $this->arguments['customerid'];
+        $streamid   = trim((string)$this->arguments['streamid']);
+        $customerid = trim((string)$this->arguments['customerid']);
+
+        if ($streamid === '') {
+            throw new Exception('StreamIframeViewHelper: argument "streamid" must not be empty.', 1748960001);
+        }
+
+        if ($customerid === '') {
+            throw new Exception('StreamIframeViewHelper: argument "customerid" must not be empty.', 1748960002);
+        }
         $preload    = $this->arguments['preload'];
         $loop       = $this->arguments['loop'];
         $muted      = $this->arguments['muted'];
@@ -68,10 +75,18 @@ final class StreamIframeViewHelper extends AbstractTagBasedViewHelper
 
         // Build query parameters
         $params = [];
-        if ($preload)  { $params['preload']  = $preload; }
-        if ($loop)     { $params['loop']     = 'true'; }
-        if ($muted)    { $params['muted']    = 'true'; }
-        if ($autoplay) { $params['autoplay'] = 'true'; }
+        if ($preload) {
+            $params['preload']  = $preload;
+        }
+        if ($loop) {
+            $params['loop']     = 'true';
+        }
+        if ($muted) {
+            $params['muted']    = 'true';
+        }
+        if ($autoplay) {
+            $params['autoplay'] = 'true';
+        }
         // poster handling commented until thumbnail support
         // if ($poster) { $params['poster'] = $poster; }
 

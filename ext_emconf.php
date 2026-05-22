@@ -1,5 +1,7 @@
 <?php
 
+$_EXTKEY = 'gedankenfolger_viewhelper';
+
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Gedankenfolger Viewhelper',
     'description' => 'A collection of viewhelpers to make the work a little bit easier',

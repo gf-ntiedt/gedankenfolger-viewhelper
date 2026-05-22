@@ -64,6 +64,7 @@ final class PackageInfoViewHelper extends AbstractViewHelper
      * Executes the ViewHelper.
      *
      * @return mixed Scalar|string|array|null
+     * @throws \JsonException When jsonEncode=true and JSON serialization fails
      */
     public function render()
     {
@@ -90,11 +91,6 @@ final class PackageInfoViewHelper extends AbstractViewHelper
         }
 
         $info = $this->buildInfoFromInstalledVersions($packageName, $exposeInstallPath);
-
-        if ($info === null) {
-            return '';
-        }
-
         $result = $key !== '' ? ($info[$key] ?? null) : $info;
 
         if ($json) {
@@ -109,9 +105,9 @@ final class PackageInfoViewHelper extends AbstractViewHelper
      *
      * @param string $packageName Composer package name.
      * @param bool   $exposeInstallPath If true, include the absolute install path.
-     * @return array<string,mixed>|null
+     * @return array<string,mixed>
      */
-    private function buildInfoFromInstalledVersions(string $packageName, bool $exposeInstallPath): ?array
+    private function buildInfoFromInstalledVersions(string $packageName, bool $exposeInstallPath): array
     {
         // isInstalled() is the fast path; avoids exceptions on lookups.
         $isInstalled = InstalledVersions::isInstalled($packageName);
@@ -147,13 +143,10 @@ final class PackageInfoViewHelper extends AbstractViewHelper
             // ignore
         }
 
-        // getReference() exists on newer Composer versions; feature-detect defensively.
-        if (method_exists(InstalledVersions::class, 'getReference')) {
-            try {
-                $reference = InstalledVersions::getReference($packageName);
-            } catch (\Throwable) {
-                // ignore
-            }
+        try {
+            $reference = InstalledVersions::getReference($packageName);
+        } catch (\Throwable) {
+            // ignore
         }
 
         $result['version'] = $version;
