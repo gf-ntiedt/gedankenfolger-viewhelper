@@ -3,8 +3,19 @@
     A collection of viewhelpers to make the work a little bit easier.
 </p>
 <p>
+    <a href="https://extensions.typo3.org/extension/gedankenfolger_viewhelper" target="_blank">TYPO3 Extension Repository</a> |
+    <a href="https://github.com/gf-ntiedt/gedankenfolger-viewhelper" target="_blank">GitHub</a> |
+    <a href="https://www.gedankenfolger.de/" target="_blank">Gedankenfolger GmbH</a>
+</p>
+<p>
     First of all many thanks to the hole TYPO3 community, all supporters of TYPO3 and especially to the <a href="https://typo3.org/" target="_blank">TYPO3-Team</a> + <a href="https://www.gedankenfolger.de/" target="_blank">Gedankenfolger GmbH</a>.
 </p>
+<h3>Code Quality</h3>
+<p>This extension is checked with the following tools:</p>
+<ul>
+    <li><a href="https://phpstan.org/" target="_blank">PHPStan</a> + <a href="https://github.com/saschaegerer/phpstan-typo3" target="_blank">phpstan-typo3</a> — static analysis</li>
+    <li><a href="https://github.com/PHP-CS-Fixer/PHP-CS-Fixer" target="_blank">php-cs-fixer</a> + <a href="https://github.com/TYPO3/coding-standards" target="_blank">TYPO3 Coding Standards</a> — code style (PSR-12)</li>
+</ul>
 
 <h3>
     Contents of this file
