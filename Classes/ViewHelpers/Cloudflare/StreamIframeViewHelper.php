@@ -18,7 +18,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
  * Example usage:
  *   <gfv:streamIframe streamid="abc123" customerid="42" preload="auto" loop="true" muted="false" autoplay="true" />
  *
- * @version   13.2.1
  * @since     13.0.0
  * @author    Niels Tiedt <niels.tiedt@gedankenfolger.de>
  * @company   Gedankenfolger GmbH

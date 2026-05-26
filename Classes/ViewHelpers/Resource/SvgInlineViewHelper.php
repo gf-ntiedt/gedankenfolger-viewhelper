@@ -20,7 +20,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception as ViewHelperException;
  * delegates sanitization to the TYPO3 Core SvgSanitizer, then injects allowlisted attributes
  * onto the root <svg> element.
  *
- * @version   13.2.6
  * @since     13.0.0
  * @author    Niels Tiedt <niels.tiedt@gedankenfolger.de>
  * @company   Gedankenfolger GmbH
