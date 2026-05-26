@@ -7,6 +7,7 @@ namespace Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers\Resource;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Resource\FileReference;
+use TYPO3\CMS\Core\Resource\Security\SvgSanitizer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -15,15 +16,11 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception as ViewHelperException;
 /**
  * Renders an SVG file inline by embedding its <svg> XML in the HTML output.
  *
- * It resolves the SVG via FAL (File/FileReference) or a given `src` (e.g. EXT:.../icon.svg),
- * parses it with DOMDocument (network disabled), sanitizes high-risk constructs and injects
- * allowlisted attributes onto the root <svg> element.
+ * Resolves the SVG via FAL (File/FileReference) or a given `src` (e.g. EXT:.../icon.svg),
+ * delegates sanitization to the TYPO3 Core SvgSanitizer, then injects allowlisted attributes
+ * onto the root <svg> element.
  *
- * Security notice:
- * Inline SVG is XSS-sensitive. This ViewHelper applies a conservative, icon-focused sanitization.
- * For untrusted SVG sources (e.g. editor uploads), a dedicated sanitizer on file-level is recommended.
- *
- * @version   14.0.2
+ * @version   14.0.7
  * @since     13.0.0
  * @author    Niels Tiedt <niels.tiedt@gedankenfolger.de>
  * @company   Gedankenfolger GmbH
@@ -136,11 +133,10 @@ final class SvgInlineViewHelper extends AbstractViewHelper
     }
 
     /**
-     * Parses SVG XML, sanitizes it and injects safe root attributes.
+     * Sanitizes, parses and injects safe root attributes into the SVG.
      *
-     * Notes:
-     *  - Uses LIBXML_NONET to prevent network access during parsing.
-     *  - Does not pre-escape attribute values: DOMDocument::saveXML() escapes them when serializing.
+     * Sanitization is delegated to the TYPO3 Core SvgSanitizer which uses
+     * enshrined/svg-sanitize under the hood.
      *
      * @param string $svgContent Raw SVG XML
      * @param array<string,mixed> $attributes
@@ -148,15 +144,14 @@ final class SvgInlineViewHelper extends AbstractViewHelper
      */
     private static function getInlineSvg(string $svgContent, array $attributes = []): string
     {
+        $svgContent = GeneralUtility::makeInstance(SvgSanitizer::class)->sanitizeContent($svgContent);
+
         $dom = new \DOMDocument();
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = false;
 
         $previous = libxml_use_internal_errors(true);
-        $loaded = $dom->loadXML(
-            $svgContent,
-            LIBXML_NONET | LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_COMPACT
-        );
+        $loaded = $dom->loadXML($svgContent, LIBXML_NONET | LIBXML_NOERROR | LIBXML_NOWARNING | LIBXML_COMPACT);
         libxml_clear_errors();
         libxml_use_internal_errors($previous);
 
@@ -169,103 +164,11 @@ final class SvgInlineViewHelper extends AbstractViewHelper
             return '';
         }
 
-        self::sanitizeSvgDom($dom);
-
         foreach (self::filterAndNormalizeAttributes($attributes) as $name => $value) {
             $root->setAttribute($name, $value);
         }
 
         return (string)$dom->saveXML($root);
-    }
-
-    /**
-     * Conservative sanitization for inline usage.
-     *
-     * Removes:
-     *  - doctype
-     *  - script / foreignObject / iframe / object / embed
-     *  - image / feImage (prevents external loads)
-     *  - event-handler attributes (on*)
-     *  - style attributes
-     *  - href/xlink:href unless fragment-only (#...)
-     *  - values containing url(http/https/data/javascript:...) (conservative)
-     *
-     * @param \DOMDocument $dom
-     */
-    private static function sanitizeSvgDom(\DOMDocument $dom): void
-    {
-        if ($dom->doctype !== null) {
-            $dom->removeChild($dom->doctype);
-        }
-
-        $xpath = new \DOMXPath($dom);
-
-        $dangerous = $xpath->query(
-            '//*[local-name()="script" or local-name()="foreignObject" or local-name()="iframe" or local-name()="object" or local-name()="embed" or local-name()="style"]'
-        );
-        if ($dangerous !== false) {
-            for ($i = $dangerous->length - 1; $i >= 0; $i--) {
-                $node = $dangerous->item($i);
-                if ($node?->parentNode) {
-                    $node->parentNode->removeChild($node);
-                }
-            }
-        }
-
-        $external = $xpath->query('//*[local-name()="image" or local-name()="feImage"]');
-        if ($external !== false) {
-            for ($i = $external->length - 1; $i >= 0; $i--) {
-                $node = $external->item($i);
-                if ($node?->parentNode) {
-                    $node->parentNode->removeChild($node);
-                }
-            }
-        }
-
-        $all = $xpath->query('//*');
-        if ($all === false) {
-            return;
-        }
-
-        foreach ($all as $node) {
-            if (!$node instanceof \DOMElement || !$node->hasAttributes()) {
-                continue;
-            }
-
-            $toRemove = [];
-            foreach ($node->attributes as $attr) {
-                $name = (string)$attr->nodeName;
-                $lname = strtolower($name);
-                $value = (string)$attr->nodeValue;
-
-                if (str_starts_with($lname, 'on')) {
-                    $toRemove[] = $name;
-                    continue;
-                }
-
-                if ($lname === 'style') {
-                    $toRemove[] = $name;
-                    continue;
-                }
-
-                if ($lname === 'href' || $lname === 'xlink:href') {
-                    $trim = ltrim($value);
-                    if ($trim === '' || $trim[0] !== '#') {
-                        $toRemove[] = $name;
-                    }
-                    continue;
-                }
-
-                if (preg_match('/url\(\s*[\'"]?(?:https?:|data:|javascript:)/i', $value) === 1) {
-                    $toRemove[] = $name;
-                    continue;
-                }
-            }
-
-            foreach ($toRemove as $attrName) {
-                $node->removeAttribute($attrName);
-            }
-        }
     }
 
     /**
