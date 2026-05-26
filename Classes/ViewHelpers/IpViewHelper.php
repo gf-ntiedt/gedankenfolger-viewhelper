@@ -22,7 +22,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  *  Compare against a specific IP:
  *    <f:if condition="{gfv:ip()} == '200.200.200.200'">...</f:if>
  *
- * @package   Gedankenfolger\GedankenfolgerViewhelper\ViewHelpers
  * @version   13.2.1
  * @since     13.0.0
  * @author    Niels Tiedt <niels.tiedt@gedankenfolger.de>
