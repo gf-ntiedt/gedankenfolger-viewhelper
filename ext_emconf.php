@@ -1,7 +1,5 @@
 <?php
 
-$_EXTKEY = 'gedankenfolger_viewhelper';
-
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Gedankenfolger Viewhelper',
     'description' => 'A collection of viewhelpers to make the work a little bit easier',
@@ -22,8 +20,7 @@ $EM_CONF[$_EXTKEY] = [
     'uploadfolder' => 0,
     'createDirs' => '',
     'clearCacheOnLoad' => 1,
-    'author' => 'Niels Tiedt',
+    'author' => 'Niels Tiedt, Gedankenfolger GmbH',
     'author_email' => 'niels.tiedt@gedankenfolger.de',
-    'author_company' => 'Gedankenfolger GmbH',
-    'version' => '13.2.8',
+    'version' => '13.2.9',
 ];

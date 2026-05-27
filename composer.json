@@ -1,10 +1,19 @@
 {
     "name": "gedankenfolger/gedankenfolger-viewhelper",
     "type": "typo3-cms-extension",
-    "version": "13.2.8",
+    "version": "13.2.9",
     "description": "A collection of viewhelpers to make the work a little bit easier",
-    "homepage": "https://www.gedankenfolger.de",
-    "license": ["GPL-2.0-or-later"],
+    "license": [
+        "GPL-2.0-or-later"
+    ],
+    "authors": [
+        {
+            "name": "Niels Tiedt, Gedankenfolger GmbH",
+            "email": "niels.tiedt@gedankenfolger.de",
+            "homepage": "https://www.gedankenfolger.de",
+            "role": "Developer"
+        }
+    ],
     "keywords": ["TYPO3 CMS"],
     "require": {
         "typo3/cms-core": "^13.4"
