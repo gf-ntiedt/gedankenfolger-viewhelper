@@ -1,6 +1,13 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [13.2.10] - 2026-05-29
+
+### Documentation
+
+- **readme:** Add changelog and acknowledgements sections, remove misplaced code quality block (def4e70)
+
+
 ## [13.2.7] - 2026-05-26
 
 ### Changed
