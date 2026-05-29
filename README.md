@@ -10,13 +10,6 @@
 <p>
     First of all many thanks to the hole TYPO3 community, all supporters of TYPO3 and especially to the <a href="https://typo3.org/" target="_blank">TYPO3-Team</a> + <a href="https://www.gedankenfolger.de/" target="_blank">Gedankenfolger GmbH</a>.
 </p>
-<h3>Code Quality</h3>
-<p>This extension is checked with the following tools:</p>
-<ul>
-    <li><a href="https://phpstan.org/" target="_blank">PHPStan</a> + <a href="https://github.com/saschaegerer/phpstan-typo3" target="_blank">phpstan-typo3</a> — static analysis</li>
-    <li><a href="https://github.com/PHP-CS-Fixer/PHP-CS-Fixer" target="_blank">php-cs-fixer</a> + <a href="https://github.com/TYPO3/coding-standards" target="_blank">TYPO3 Coding Standards</a> — code style (PSR-12)</li>
-</ul>
-
 <h3>
     Contents of this file
 </h3>
@@ -40,6 +33,12 @@
                 <a href="#packageinfoviewhelper">PackageInfoViewHelper</a>
             </li>
         </ol>
+    </li>
+    <li>
+        <a href="#changelog">Changelog</a>
+    </li>
+    <li>
+        <a href="#acknowledgements">Acknowledgements</a>
     </li>
     <li>
         <a href="#noticetrademark">Notice on Logo / Trademark Use</a>
@@ -276,6 +275,24 @@ or
 
 <hr/>
 
+<h3 id="changelog">
+    Changelog
+</h3>
+<p>
+    See <a href="CHANGELOG.md">CHANGELOG.md</a> — generated with <a href="https://git-cliff.org">git-cliff</a> from Conventional Commits.
+</p>
+
+<h3 id="acknowledgements">
+    Acknowledgements
+</h3>
+<p>
+    This extension builds on the following open source projects:
+</p>
+<ul>
+    <li><a href="https://typo3.org/" target="_blank">TYPO3</a></li>
+</ul>
+
+<hr/>
 
 <h3 id="noticetrademark">
     Notice on Logo / Trademark Use
