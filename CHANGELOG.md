@@ -1,6 +1,74 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [13.3.1] - 2026-06-26
+
+### Added
+
+- **viewhelper:** Add scheme argument to gfv:link.tel; fix preg_replace cast in uri.tel (382e24e)
+
+
+## [13.3.0] - 2026-06-26
+
+### Added
+
+- **viewhelper:** Replace UrlschemeViewHelper with gfv:link.tel and gfv:uri.tel (68df563)
+
+
+## [13.2.10] - 2026-05-29
+
+### Documentation
+
+- **readme:** Add changelog and acknowledgements sections, remove misplaced code quality block (def4e70)
+
+
+## [13.2.7] - 2026-05-26
+
+### Changed
+
+- **viewhelpers:** Remove redundant @version annotations from all ViewHelper classes (7b7796b)
+
+
+## [13.2.6] - 2026-05-26
+
+### Fixed
+
+- **PackageInfoViewHelper:** Use TYPO3Fluid namespace for AbstractViewHelper (99b1972)
+
+
+## [13.2.5] - 2026-05-26
+
+### Changed
+
+- **SvgInlineViewHelper:** Replace custom DOM sanitizer with TYPO3 Core SvgSanitizer (cfb775c)
+
+
+## [13.2.4] - 2026-05-26
+
+### Documentation
+
+- **readme:** Add TER link, GitHub link and code quality section (24bf95e)
+
+
+## [13.2.3] - 2026-05-22
+
+### Added
+
+- **icons:** Update Extension.svg icon (b0569fd)
+
+
+## [13.2.2] - 2026-05-22
+
+### Fixed
+
+- Define $_EXTKEY, apply CGL and error handling improvements (397df1c)
+
+
+### Security
+
+- Fix XSS/injection vulnerabilities and harden ViewHelpers (13.2.1) (c57e020)
+
+
 ## [13.3.0] - 2026-06-26
 
 ### Added
