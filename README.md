@@ -27,7 +27,10 @@
                 <a href="#svginlineviewhelper">SvgInlineViewHelper</a>
             </li>
             <li>
-                <a href="#urlschemeviewhelper">UrlschemeViewHelper</a>
+                <a href="#telviewhelper-link">TelViewHelper (link.tel)</a>
+            </li>
+            <li>
+                <a href="#telviewhelper-uri">TelViewHelper (uri.tel)</a>
             </li>
             <li>
                 <a href="#packageinfoviewhelper">PackageInfoViewHelper</a>
@@ -187,19 +190,20 @@ or
     Namespace link: <br/> <code>{gfv:link}</code>
 </h3>
 
-<h3 id="urlschemeviewhelper">
-    UrlschemeViewHelper
+<h3 id="telviewhelper-link">
+    TelViewHelper — link.tel
 </h3>
 
 <p>
-    This ViewHelper generates a hyperlink for phone numbers by formatting them according to a specific scheme (e.g., tel:). <br/>
-    It validates the phone number format and ensures it is properly formatted before creating the link.
+    Renders an <code>&lt;a href="tel:..."&gt;</code> link for a phone number.<br/>
+    The number is normalized to E.164 format. The original formatted number is used as link text
+    unless child content is provided.
 </p>
 
 <ul>
     <li>
         number:<br>
-        Phone number to be formatted
+        Phone number in international format (must start with +)
     </li>
 </ul>
 <p>
@@ -207,9 +211,8 @@ or
 </p>
 <ul>
     <li>
-        scheme:<br>
-        URL scheme to prepend, e.g., tel:<br>
-        Default: tel:
+        class, id, title, etc.:<br>
+        All standard HTML tag attributes are supported.
     </li>
 </ul>
 <p>
@@ -217,7 +220,39 @@ or
 </p>
 
 ```xml
-<gfv:link.urlscheme number="+49 (0) 7777 77 77 77" />
+<gfv:link.tel number="+49 (0) 7777 77 77 77" />
+<gfv:link.tel number="+49 (0) 7777 77 77 77">Call us</gfv:link.tel>
+{gfv:link.tel(number: '+49 (0) 7777 77 77 77')}
+```
+
+<hr/>
+
+<h3 id="namespace_uri">
+    Namespace uri: <br/> <code>{gfv:uri}</code>
+</h3>
+
+<h3 id="telviewhelper-uri">
+    TelViewHelper — uri.tel
+</h3>
+
+<p>
+    Returns a <code>tel:</code> URI string for a phone number without rendering an HTML tag.<br/>
+    Use this when you need the href value only, e.g. to pass it to another ViewHelper.
+</p>
+
+<ul>
+    <li>
+        number:<br>
+        Phone number in international format (must start with +)
+    </li>
+</ul>
+<p>
+    Example usage:
+</p>
+
+```xml
+{gfv:uri.tel(number: '+49 (0) 7777 77 77 77')}
+<a href="{gfv:uri.tel(number: phoneNumber)}">Call</a>
 ```
 
 <hr/>
