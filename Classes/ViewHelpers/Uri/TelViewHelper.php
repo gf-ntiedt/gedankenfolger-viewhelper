@@ -44,7 +44,7 @@ final class TelViewHelper extends AbstractViewHelper
             throw new Exception('Uri\TelViewHelper: number must start with "+" and country code, e.g. +49 (0) 7777 77 77 77', 1750938101);
         }
 
-        $normalized = '+' . preg_replace('/\D+/', '', $number);
+        $normalized = '+' . (string)preg_replace('/\D+/', '', $number);
 
         if (!preg_match('/^\+\d{6,15}$/', $normalized)) {
             throw new Exception('Uri\TelViewHelper: invalid number format, e.g. +49 (0) 7777 77 77 77', 1750938102);

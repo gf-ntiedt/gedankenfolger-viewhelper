@@ -15,6 +15,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Exception;
  *
  * Example usage:
  *   <gfv:link.tel number="+49 (0) 7777 77 77 77" />
+ *   <gfv:link.tel number="+49 (0) 7777 77 77 77" scheme="fax:" />
  *   <gfv:link.tel number="+49 (0) 7777 77 77 77">Call us</gfv:link.tel>
  *   {gfv:link.tel(number: '+49 (0) 7777 77 77 77')}
  *
@@ -35,29 +36,36 @@ final class TelViewHelper extends AbstractTagBasedViewHelper
     {
         parent::initializeArguments();
         $this->registerArgument('number', 'string', 'Phone number in international format, e.g. +49 (0) 7777 77 77 77', true);
+        $this->registerArgument('scheme', 'string', 'URI scheme to prepend. Allowed: tel:, fax:, sms:, callto:', false, 'tel:');
     }
 
     /**
-     * Render the <a href="tel:..."> tag.
+     * Render the <a href="[scheme]+..."> tag.
      *
      * @return string Rendered HTML anchor tag
-     * @throws Exception if the number is missing or invalid
+     * @throws Exception if the number or scheme is invalid
      */
     public function render(): string
     {
         $number = trim((string)$this->arguments['number']);
+        $scheme = (string)$this->arguments['scheme'];
+
+        $allowedSchemes = ['tel:', 'fax:', 'sms:', 'callto:'];
+        if (!in_array($scheme, $allowedSchemes, true)) {
+            throw new Exception('TelViewHelper: invalid scheme "' . $scheme . '". Allowed: ' . implode(', ', $allowedSchemes), 1750938003);
+        }
 
         if (!str_starts_with($number, '+')) {
             throw new Exception('TelViewHelper: number must start with "+" and country code, e.g. +49 (0) 7777 77 77 77', 1750938001);
         }
 
-        $normalized = '+' . preg_replace('/\D+/', '', $number);
+        $normalized = '+' . (string)preg_replace('/\D+/', '', $number);
 
         if (!preg_match('/^\+\d{6,15}$/', $normalized)) {
             throw new Exception('TelViewHelper: invalid number format, e.g. +49 (0) 7777 77 77 77', 1750938002);
         }
 
-        $this->tag->addAttribute('href', 'tel:' . $normalized);
+        $this->tag->addAttribute('href', $scheme . $normalized);
 
         $content = $this->renderChildren();
         $this->tag->setContent($content !== null && $content !== '' ? (string)$content : $number);
