@@ -195,7 +195,7 @@ or
 </h3>
 
 <p>
-    Renders an <code>&lt;a href="tel:..."&gt;</code> link for a phone number.<br/>
+    Renders an <code>&lt;a href="[scheme]+..."&gt;</code> link for a phone number.<br/>
     The number is normalized to E.164 format. The original formatted number is used as link text
     unless child content is provided.
 </p>
@@ -211,6 +211,11 @@ or
 </p>
 <ul>
     <li>
+        scheme:<br>
+        URI scheme to prepend. Allowed: <code>tel:</code>, <code>fax:</code>, <code>sms:</code>, <code>callto:</code><br>
+        Default: <code>tel:</code>
+    </li>
+    <li>
         class, id, title, etc.:<br>
         All standard HTML tag attributes are supported.
     </li>
@@ -221,6 +226,7 @@ or
 
 ```xml
 <gfv:link.tel number="+49 (0) 7777 77 77 77" />
+<gfv:link.tel number="+49 (0) 7777 77 77 77" scheme="fax:" />
 <gfv:link.tel number="+49 (0) 7777 77 77 77">Call us</gfv:link.tel>
 {gfv:link.tel(number: '+49 (0) 7777 77 77 77')}
 ```
