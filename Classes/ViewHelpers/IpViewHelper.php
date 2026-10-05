@@ -52,8 +52,6 @@ final class IpViewHelper extends AbstractViewHelper
 {
     /**
      * Registers the optional secureMode argument.
-     *
-     * @return void
      */
     public function initializeArguments(): void
     {
