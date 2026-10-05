@@ -58,7 +58,7 @@
 
 <p>
     ViewHelper to determine and output the client IP address.<br/>
-    This ViewHelper checks in the following order:
+    By default (<code>secureMode="false"</code>) this ViewHelper checks in the following order:
 </p>
 
 <ol>
@@ -89,6 +89,35 @@
 
 <p>
     Returns an empty string when no valid IP address can be determined (e.g. CLI context).
+</p>
+
+<p>
+    <strong>Warning:</strong> In default mode, the returned value is read directly from
+    client-controlled HTTP headers and is not verified against TYPO3's reverse-proxy trust
+    configuration. Any visitor can send a forged value for these headers, so the result
+    must never be used for access control, authentication, logging for audit purposes, or
+    any other secret or security-relevant decision.
+</p>
+
+<p>
+    <code>secureMode="true"</code> instead resolves the address via TYPO3's own
+    reverse-proxy trust mechanism (<code>NormalizedParams</code>), which only trusts proxy
+    headers when the request actually comes from a proxy listed in
+    <code>SYS/reverseProxyIP</code>:
+</p>
+
+```xml
+{gfv:ip(secureMode: true)}
+```
+
+<p>
+    <strong>Important:</strong> <code>secureMode="true"</code> is only trustworthy once
+    <code>SYS/reverseProxyIP</code> and <code>SYS/reverseProxyHeaderMultiValue</code> are
+    correctly configured for the environment this extension runs in (the real IP ranges of
+    whatever reverse proxy/CDN sits in front of the site). Without that configuration,
+    <code>secureMode="true"</code> silently returns <code>REMOTE_ADDR</code> — behind a
+    reverse proxy, that is the proxy's own address, not the visitor's — with no error or
+    warning.
 </p>
 
 <hr/>
