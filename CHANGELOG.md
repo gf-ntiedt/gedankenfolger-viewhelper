@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [13.4.1] - 2026-10-06
+
+### Fixed
+
+- **namespace:** Register gfv namespace in ext_localconf.php for TYPO3 13 (d50fc12)
+
+
 ## [13.4.0] - 2026-10-05
 
 ### Added
