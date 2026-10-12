@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [13.4.2] - 2026-10-12
+
+### Fixed
+
+- **license:** Replace GPLv3 text with GPLv2 to match composer.json (2bff5d7)
+
+
 ## [13.4.1] - 2026-10-06
 
 ### Fixed
