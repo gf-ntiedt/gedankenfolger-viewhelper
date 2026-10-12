@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [14.2.2] - 2026-10-12
+
+### Fixed
+
+- **license:** Name the viewhelper extension instead of faq in LICENSE-ICONS (0e4fcaa)
+
+
 ## [14.2.1] - 2026-10-12
 
 ### Fixed
